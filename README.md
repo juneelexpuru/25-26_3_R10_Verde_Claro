@@ -47,10 +47,14 @@ RETO-10-LOOKIERO/
 │   │   ├── kafka_producer.py     # Simulación de entrada de nuevas prendas
 │   │   └── kafka_consumer.py     # Ingesta y procesamiento en tiempo real
 │   │
-│   └── web/                # Visualización Frontend
+│   └── web/              
 │       ├── index.html
-│       ├── css/
-│       └── js/             # Scripts D3.js para visualización
+│       ├── looks.html
+│       ├── dashboard.html
+│       ├── info.html
+│       ├── look.jpg
+│       ├── lookiero_logo.jpg
+│       └── style.css        
 │
 ├── requirements.txt        # Librerías necesarias (NetworkX, PyTorch, Kafka, etc.)
 └── README.md               # Documentación del proyecto
