@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Lookiero - Información</title>
+  <link rel="stylesheet" href="style.css" />
+
+  <!-- Iconos -->
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+
+  <!-- Estilos -->
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, Helvetica, sans-serif;
+      background: #f1e4db;
+    }
+
+    /* HEADER */
+    .header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1rem 2rem;
+      background: #ffffff;
+      border-radius: 12px;
+      margin: 1rem;
+      position: relative;
+    }
+
+     .header-left {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .header-logo img {
+      height: 70px;
+    }
+
+    .header-title {
+      font-size: 2rem;
+      font-weight: bold;
+      position: absolute;
+      left: 50%;
+      transform: translateX(-50%);
+    }
+
+    .nav-tabs {
+      display: flex;
+      gap: 1rem;
+    }
+
+    .nav-tabs a {
+      text-decoration: none;
+      color: #000;
+      font-weight: 700;
+      font-size: 1.2rem;
+      padding: .6rem 1rem;
+      position: relative;
+      background: #f3a486;
+      border-radius: 8px;
+    }
+
+    .nav-tabs a:hover::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -4px;
+  width: 100%;
+  height: 2px;
+  background: var(--brand-primary);
+}
+
+
+.nav-tabs a.active {
+  background-color: #f3a486; /* mismo color que normal */
+}
+
+    /* CONTENIDO */
+    main {
+      max-width: 900px;
+      margin: 2rem auto;
+      padding: 0 1rem;
+    }
+
+    .info-box {
+      background: #ffffff;
+      padding: 2rem;
+      border-radius: 12px;
+      margin-bottom: 2rem;
+    }
+
+    h2 {
+      margin-top: 0;
+      color: #333;
+    }
+
+    p {
+      color: #444;
+      line-height: 1.6;
+    }
+
+   /* GRID DE PASOS EN UNA LÍNEA */
+.steps-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+
+  gap: 1.5rem;
+  margin-top: 1.5rem;
+}
+
+
+.step-card {
+  background: #f1e4db;
+  padding: 1.2rem;
+  border-radius: 10px;
+  text-align: center;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.step-card:hover {
+  transform: scale(1.05);
+  box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+}
+
+
+.step-card i {
+  font-size: 2rem;
+  color: #d88a6d;
+  margin-bottom: 0.5rem;
+}
+
+/* Responsive */
+@media (max-width: 900px) {
+  .steps-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 500px) {
+  .steps-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+
+    .card {
+      background: #f1e4db;
+      padding: 1rem;
+      border-radius: 10px;
+      text-align: center;
+    }
+
+    .card i {
+      font-size: 2rem;
+      color: #d88a6d;
+      margin-bottom: 0.5rem;
+    }
+
+    .back-btn {
+      display: inline-block;
+      margin-top: 1rem;
+      background: #f3a486;
+      color: #fff;
+      padding: 12px 24px;
+      border-radius: 8px;
+      text-decoration: none;
+      font-weight: bold;
+    }
+  </style>
+</head>
+
+<body>
+
+<header class="header">
+  <!-- Logo clicable -->
+  <div class="header-logo">
+    <a href="index.html">
+      <img src="lookiero_logo.jpg" alt="Logo Lookiero">
+    </a>
+  </div>
+
+  <div class="header-title">Sobre Lookiero</div>
+
+  <!-- Tabs -->
+  <nav class="nav-tabs">
+    <a href="index.html"><i class="fas fa-home"></i> Inicio</a>
+    <a href="dashboard.html"><i class="fas fa-chart-bar"></i> Dashboard</a>
+    <a href="looks.html"><i class="fas fa-shirt"></i> Looks</a>
+  </nav>
+</header>
+
+<main>
+
+  <!-- Qué es Lookiero -->
+  <div class="info-box">
+    <h2>¿Qué es Lookiero?</h2>
+    <p>
+      Lookiero es una plataforma de <strong>personal shopping online</strong> que combina estilistas profesionales
+      con tecnología y análisis de datos para ofrecer looks personalizados a cada cliente.
+    </p>
+  </div>
+
+<div class="info-box">
+  <h2>¿Cómo funciona?</h2>
+
+  <div class="steps-grid">
+
+    <div class="step-card">
+      <i class="fas fa-user"></i>
+      <p><strong>Paso 1.</strong><br>El cliente crea su perfil y define preferencias</p>
+    </div>
+
+    <div class="step-card">
+      <i class="fas fa-list-check"></i>
+      <p><strong>Paso 2.</strong><br>Completa un cuestionario de estilo y tallas</p>
+    </div>
+
+    <div class="step-card">
+      <i class="fas fa-magic"></i>
+      <p><strong>Paso 3.</strong><br>Estilistas y datos generan looks personalizados</p>
+    </div>
+
+    <div class="step-card">
+      <i class="fas fa-box-open"></i>
+      <p><strong>Paso 4.</strong><br>El cliente recibe la caja en su domicilio</p>
+    </div>
+
+    <div class="step-card">
+      <i class="fas fa-heart"></i>
+      <p><strong>Paso 5.</strong><br>Se queda solo con las prendas que le gustan</p>
+    </div>
+
+    <div class="step-card">
+      <i class="fas fa-chart-line"></i>
+      <p><strong>Paso 6.</strong><br>El feedback mejora futuras recomendaciones</p>
+    </div>
+
+  </div>
+</div>
+
+
+  <!-- Valor diferencial -->
+  <div class="info-box">
+    <h2>Valor diferencial</h2>
+    <p>
+      Lookiero destaca por su enfoque en la personalización, la experiencia de usuario
+      y el uso de datos para mejorar continuamente las recomendaciones de moda.
+    </p>
+  </div>
+
+  <!-- Volver -->
+  <div style="text-align:center;">
+    <a href="index.html" class="back-btn">⬅ Volver al inicio</a>
+  </div>
+
+</main>
+
+</body>
+</html>

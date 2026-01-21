@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Lookiero - Dashboard / Carrusel</title>
+
+  <link rel="stylesheet" href="style.css" />
+
+  <style>
+    body { margin: 0; font-family: var(--font-sans); background: #f1e4db; }
+
+
+
+    .header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1rem 2rem;
+      background: #ffffff;
+      border-bottom: 1px solid rgba(0,0,0,0.1);
+      border-radius: 12px;
+      margin: 1rem;
+      position: relative;
+    }
+
+    .header-left {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .header-logo img {
+      height: 70px;
+      width: auto;
+    }
+
+    .header-title {
+      font-size: 2rem;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      position:absolute;
+      left:50%;
+      transform:translateX(-50%);
+    }
+
+    .nav-tabs {
+      display: flex;
+      gap: 1.5rem;
+    }
+
+    .nav-tabs a {
+      text-decoration: none;
+      color: #000;
+      font-weight: 700;
+      font-size: 1.2rem;
+      padding: .6rem 1rem;
+      position: relative;
+      background: #f3a486;
+      border-radius: 8px;
+    }
+
+    
+.nav-tabs a:hover::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -4px;
+  width: 100%;
+  height: 2px;
+  background: var(--brand-primary);
+}
+
+/* Opcional: si quieres que el botón activo tenga otro estilo de fondo en lugar de subrayado */
+.nav-tabs a.active {
+  background-color: #f3a486; /* mismo color que normal */
+  /* quita el ::after para activo */
+}
+
+    /* ===== ESTILOS ORIGINALES DEL CARRUSEL, NO MODIFICADOS ===== */
+
+    :root{
+      --bg: #f1e4db;
+      --card-bg: #ffffff;
+      --accent: #f3a486;
+      --radius: 12px;
+      --gap: 1.25rem;
+      --card-size: min(1000px, 92vw);
+    }
+
+    *{box-sizing:border-box}
+
+    html,body{height:100%;}
+
+    .viewer{
+      width:var(--card-size);
+      height:calc(var(--card-size) * 0.56);
+      background:var(--card-bg);
+      border-radius:var(--radius);
+      box-shadow:0 10px 30px rgba(0,0,0,0.06);
+      position:relative;
+      overflow: visible;
+      display:flex;
+      align-items:stretch;
+      margin:1rem auto;
+    }
+
+    .panel-left{
+      flex:1;
+      padding:2.2rem;
+      display:flex;
+      flex-direction:column;
+      gap:1rem;
+      justify-content:center;
+    }
+
+    .look-title{font-size:1.6rem;font-weight:700;margin:0}
+    .look-desc{color:#333;line-height:1.45;margin:0}
+    .meta{color:#666;font-size:0.95rem;margin-top:1rem}
+
+    .panel-right{
+      flex:1;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      padding:1.5rem;
+    }
+    .panel-right img{
+      max-width:90%;
+      max-height:90%;
+      border-radius:8px;
+      object-fit:cover;
+      transition:transform .45s ease, opacity .35s ease;
+    }
+
+    .nav-btn{
+      position:absolute;
+      top:50%;
+      transform:translateY(-50%);
+      width:56px;height:56px;border-radius:50%;
+      display:grid;place-items:center;
+      background:rgba(0,0,0,0.06);border:0;cursor:pointer;
+    }
+
+    .nav-btn.left{left: calc(50% - (var(--card-size) / 2) - 60px);}
+    .nav-btn.right{right: calc(50% - (var(--card-size) / 2) - 60px);}
+
+    .footer-controls{
+      position:absolute;left:0;right:0;bottom:12px;display:flex;justify-content:center;gap:.6rem;
+    }
+    .dot{width:10px;height:10px;border-radius:50%;background:rgba(0,0,0,0.12);cursor:pointer}
+    .dot.active{background:var(--accent)}
+
+  </style>
+</head>
+
+<body>
+
+  <!-- ================== HEADER FINAL (IGUAL QUE EL TUYO) ================== -->
+  <header class="header">
+    <div class="header-left">
+      <div class="header-logo">
+        <a href="info.html">
+          <img src="lookiero_logo.jpg" alt="Logo Lookiero" />
+        </a>
+      </div>
+
+    </div>
+
+    <div class="header-title">Lookiero Admin</div>
+
+    <nav class="nav-tabs" aria-label="Navegación principal">
+      <a href="index.html"><i class="fas fa-home" style="margin-right:6px"></i>Inicio</a>
+      <a href="dashboard.html" class="active"><i class="fas fa-chart-bar" style="margin-right:6px"></i>Dashboard</a>
+      <a href="looks.html"><i class="fas fa-shirt" style="margin-right:6px"></i>Looks</a>
+    </nav>
+  </header>
+
+  <!-- ================== CARRUSEL ================== -->
+  <div class="viewer">
+
+    <button class="nav-btn left" id="prevBtn">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M15 18l-6-6 6-6"></path>
+      </svg>
+    </button>
+
+    <div class="panel-left">
+      <h2 class="look-title" id="lookTitle">Look 1</h2>
+      <p class="look-desc" id="lookDesc">Descripción breve del look número 1.</p>
+      <p class="meta" id="lookMeta">Prendas: Camisa, Pantalón, Zapatos · Estilo: Casual</p>
+    </div>
+
+    <div class="panel-right">
+      <img id="lookImage" src="look1.png" alt="Look 1" />
+    </div>
+
+    <button class="nav-btn right" id="nextBtn">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M9 18l6-6-6-6"></path>
+      </svg>
+    </button>
+
+    <div class="footer-controls" id="dots"></div>
+
+  </div>
+
+  <script>
+    const looks = [
+      {img: 'look1.png', title: 'Look 1', desc: 'Blusa blanca, jeans y zapatillas — look cómodo para el día a día.', meta: 'Prendas: blusa, jeans, zapatillas'},
+      {img: 'look2.png', title: 'Look 2', desc: 'Vestido midi con accesorios minimalistas.', meta: 'Prendas: vestido, bolso, sandalias'},
+      {img: 'look3.png', title: 'Look 3', desc: 'Americana con pantalón formal.', meta: 'Prendas: americana, pantalón, mocasines'},
+      {img: 'look4.png', title: 'Look 4', desc: 'Chaqueta oversize y botas.', meta: 'Prendas: chaqueta, botas, bufanda'},
+      {img: 'look5.png', title: 'Look 5', desc: 'Conjunto monocromático elegante.', meta: 'Prendas: top, falda, accesorios'},
+      {img: 'look6.png', title: 'Look 6', desc: 'Blusa blanca, jeans y zapatillas — look cómodo para el día a día.', meta: 'Prendas: blusa, jeans, zapatillas'},
+      {img: 'look7.png', title: 'Look 7', desc: 'Vestido midi con accesorios minimalistas.', meta: 'Prendas: vestido, bolso, sandalias'},
+      {img: 'look8.png', title: 'Look 8', desc: 'Americana con pantalón formal.', meta: 'Prendas: americana, pantalón, mocasines'},
+      {img: 'look9.png', title: 'Look 9', desc: 'Chaqueta oversize y botas.', meta: 'Prendas: chaqueta, botas, bufanda'},
+      {img: 'look10.png', title: 'Look 10', desc: 'Conjunto monocromático elegante.', meta: 'Prendas: top, falda, accesorios'}
+    ];
+
+    let index = 0;
+    const imgEl = document.getElementById('lookImage');
+    const titleEl = document.getElementById('lookTitle');
+    const descEl = document.getElementById('lookDesc');
+    const metaEl = document.getElementById('lookMeta');
+    const dotsContainer = document.getElementById('dots');
+    const prevBtn = document.getElementById('prevBtn');
+    const nextBtn = document.getElementById('nextBtn');
+
+    looks.forEach((_, i) => {
+      const d = document.createElement('div');
+      d.className = 'dot' + (i === 0 ? ' active' : '');
+      d.addEventListener('click', () => goTo(i));
+      dotsContainer.appendChild(d);
+    });
+
+    const dots = [...dotsContainer.children];
+
+    function updateUI(){
+      const look = looks[index];
+      imgEl.style.opacity = 0;
+
+      setTimeout(()=>{
+        imgEl.src = look.img;
+        titleEl.textContent = look.title;
+        descEl.textContent = look.desc;
+        metaEl.textContent = look.meta;
+        imgEl.style.opacity = 1;
+      },200);
+
+      dots.forEach((d,i)=> d.classList.toggle('active', i===index));
+    }
+
+    function goTo(i){
+      if(i<0 || i>=looks.length) return;
+      index=i; updateUI();
+    }
+
+    prevBtn.onclick = ()=> goTo(index-1);
+    nextBtn.onclick = ()=> goTo(index+1);
+
+    updateUI();
+  </script>
+
+</body>
+</html>
