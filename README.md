@@ -25,7 +25,7 @@ RETO10_entrega/
 │   │   ├── Datos_look&like/
 │   │   │   ├── customers_data_2.csv
 │   │   │   ├── items_data.csv
-│   │   │   └── look_and_like_data_2.csv [cite: 13]
+│   │   │   └── look_and_like_data_2.csv 
 │   │   ├── Datos_looks/
 │   │   │   ├── brand.csv
 │   │   │   ├── color.csv
@@ -37,9 +37,9 @@ RETO10_entrega/
 │   │   │   ├── product_feature_value_qualifier.csv
 │   │   │   ├── product_variant.csv
 │   │   │   ├── season.csv
-│   │   │   └── size.csv [cite: 13]
+│   │   │   └── size.csv 
 │   │   └── Datos_UX/
-│   │       └── page_views_2.csv [cite: 13]
+│   │       └── page_views_2.csv 
 │   │
 │   └── Transformados/        # Datos procesados listos para el modelo
 │       ├── combinaciones_final.csv
@@ -47,11 +47,11 @@ RETO10_entrega/
 │       ├── df_expandido.csv
 │       ├── df_grafo_final.csv
 │       ├── df_resultado.csv
-│       └── resultados_looks_optimizado.csv [cite: 13]
+│       └── resultados_looks_optimizado.csv 
 │
 ├── Modelos/
 │   ├── grap.gml         
-│   └── Modelo_GAT.pth [cite: 13]          
+│   └── Modelo_GAT.pth           
 │
 ├── Scripts/                   # Orden de ejecución
 │   ├── Preprocesamiento.ipynb # 1        
@@ -59,14 +59,17 @@ RETO10_entrega/
 │   ├── Analisis_Grafo.ipynb   # 3
 │   ├── Modelo.ipynb           # 4 
 │   ├── funciones.py
-│   └── Graficos/ [cite: 13]           
+│   ├── AnalisisUX.py
+│   ├── looklikeanalisis.ipynb.py
+│
+├── Graficos/          
 │
 ├── FlujoStreaming/
 │   ├── templates/
 │   │   └── index.html
 │   ├── consumer_graph.py
 │   ├── funciones.py
-│   └── producer_app.py [cite: 13]
+│   └── producer_app.py 
 │
 ├── web/             
 │   ├── dashboard.html
@@ -85,7 +88,7 @@ RETO10_entrega/
 │   ├── Look9.png
 │   ├── Look10.png
 │   ├── lookiero_logo.jpg
-│   └── style.css [cite: 13]     
+│   └── style.css      
 │
 ├── environmentR10VerdeClaro.txt        
-└── README.md [cite: 13]
+└── README.md 
