@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Lookiero - Dashboard / Carrusel</title>
+
+  <link rel="stylesheet" href="style.css" />
+
+  <style>
+    :root {
+  --brand-hover: #d88a6d;
+  --brand-primary: #f3a486;
+  --bg-color: #f1e4db;
+  --text-dark: #333;
+}
+
+body { margin: 0; font-family: sans-serif; background: var(--bg-color); color: var(--text-dark); }
+
+.header {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 1rem 2rem; background: #fff; border-bottom: 1px solid rgba(0,0,0,0.1);
+  border-radius: 12px; margin: 1rem; position: relative;
+}
+
+.header-logo img { height: 70px; width: auto; }
+.header-title { font-size: 2rem; font-weight: 700; position:absolute; left:50%; transform:translateX(-50%); }
+
+.nav-tabs { display: flex; gap: 1.5rem; }
+.nav-tabs a {
+  text-decoration: none; color: #000; font-weight: 700; padding: .6rem 1rem;
+  background: var(--brand-primary); border-radius: 8px; transition: 0.3s;
+}
+.nav-tabs a:hover { background: var(--brand-hover); color: #fff; }
+
+.info-box {
+  background: white; margin: 1rem; padding: 1.5rem; border-radius: 12px;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+}
+    /* ===== ESTILOS DEL CARRUSEL ===== */
+    :root{
+      --bg: #f1e4db;
+      --card-bg: #ffffff;
+      --accent: #f3a486;
+      --radius: 12px;
+      --gap: 1.25rem;
+      --card-size: min(1000px, 92vw);
+    }
+
+    .viewer{
+      width:var(--card-size);
+      height:calc(var(--card-size) * 0.56);
+      background:var(--card-bg);
+      border-radius:var(--radius);
+      box-shadow:0 10px 30px rgba(0,0,0,0.06);
+      position:relative;
+      overflow: visible;
+      display:flex;
+      align-items:stretch;
+      margin:2rem auto;
+    }
+
+    .panel-left{
+      flex:1;
+      padding:2.2rem;
+      display:flex;
+      flex-direction:column;
+      gap:1rem;
+      justify-content:center;
+    }
+
+    .look-title{font-size:1.6rem;font-weight:700;margin:0}
+    .look-desc{color:#333;line-height:1.45;margin:0}
+    .meta{color:#666;font-size:0.95rem;margin-top:1rem}
+
+    .panel-right{
+      flex:1;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      padding:1.5rem;
+    }
+    .panel-right img{
+      max-width:90%;
+      max-height:90%;
+      border-radius:8px;
+      object-fit:cover;
+      transition:transform .45s ease, opacity .35s ease;
+    }
+
+    .nav-btn{
+      position:absolute;
+      top:50%;
+      transform:translateY(-50%);
+      width:56px;height:56px;border-radius:50%;
+      display:grid;place-items:center;
+      background:rgba(0,0,0,0.06);border:0;cursor:pointer;
+      z-index: 10;
+    }
+
+    .nav-btn.left{left: -28px;}
+    .nav-btn.right{right: -28px;}
+
+    .footer-controls{
+      position:absolute;left:0;right:0;bottom:12px;display:flex;justify-content:center;gap:.6rem;
+    }
+    .dot{width:10px;height:10px;border-radius:50%;background:rgba(0,0,0,0.12);cursor:pointer}
+    .dot.active{background:var(--accent)}
+  </style>
+</head>
+
+<body>
+
+  <header class="header">
+    <div class="header-left">
+      <div class="header-logo">
+        <a href="info.html">
+          <img src="lookiero_logo.jpg" alt="Logo Lookiero" />
+        </a>
+      </div>
+    </div>
+
+    <div class="header-title">Lookiero Admin</div>
+
+    <nav class="nav-tabs">
+      <a href="index.html">
+        <span style="margin-right:6px;"><i class="fas fa-home"></i></span>Inicio
+      </a>
+      <a href="dashboard.html">
+        <span style="margin-right:6px;"><i class="fas fa-chart-bar"></i></span>Dashboard
+      </a>
+      <a href="looks.html" class="active">
+        <span style="margin-right:6px;"><i class="fas fa-shirt"></i></span>Looks
+      </a>
+      <a href="modelo.html">
+        <span style="margin-right:6px;"><i class="fas fa-brain"></i></span>Modelo
+      </a>
+    </nav>
+  </header>
+
+  <div class="viewer">
+    <button class="nav-btn left" id="prevBtn">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="24">
+        <path d="M15 18l-6-6 6-6"></path>
+      </svg>
+    </button>
+
+    <div class="panel-left">
+      <h2 class="look-title" id="lookTitle">Cargando Look...</h2>
+      <p class="look-desc" id="lookDesc">Descripción del look.</p>
+      <p class="meta" id="lookMeta">Metadatos de prendas.</p>
+    </div>
+
+    <div class="panel-right">
+      <img id="lookImage" src="" alt="Look Visual" />
+    </div>
+
+    <button class="nav-btn right" id="nextBtn">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="24">
+        <path d="M9 18l6-6-6-6"></path>
+      </svg>
+    </button>
+
+    <div class="footer-controls" id="dots"></div>
+  </div>
+
+  <script>
+    const looks = [
+      {img: 'Look1.png', title: 'Boho-Chic Floral de Transición', meta: 'Prendas: Vestido maxi floral, cazadora vaquera, fular oversize', desc: 'Un conjunto que domina las capas: el vestido de gasa con estampado tropical se equilibra con la estructura de una chaqueta denim clara.'},
+      {img: 'Look2.png', title: 'Minimalismo Cálido en Contraste', meta: 'Prendas: Jersey de punto, minifalda de línea A, bolso bandolera.', desc: 'Un conjunto que equilibra la sobriedad y el color: el jersey gris aporta una textura suave frente a la falda roja vibrante.'},
+      {img: 'Look3.png', title: 'Urbano Minimalista con Carácter', meta: 'Prendas: Chaqueta de cuero, jersey de punto crudo, vaqueros skinny', desc: 'Contraste de texturas: la suavidad del punto crema se equilibra con la actitud de una chaqueta de piel negra.'},
+      {img: 'Look4.png', title: 'Urban Layers de Otoño', meta: 'Prendas: Sudadera con capucha, abrigo 3/4 lana, vaqueros desgastados', desc: 'Personifica el confort urbano con la superposición de una sudadera bajo un abrigo sastre de lana.'},
+      {img: 'Look5.png', title: 'Armonía Boho-Chic con Fular Liso', meta: 'Prendas: Denim Jacket, Floral Maxi Dress, Fular azul noche', desc: 'Equilibra el vibrante estampado floral con la sobriedad de los accesorios denim y azul liso.'},
+      {img: 'Look6.png', title: 'Minimalismo Moderno en Blanco y Negro', meta: 'Prendas: Bomber de piel, top blanco, falda de tubo midi', desc: 'Outfit de alto contraste que proyecta seguridad. La cazadora de cuero aporta una textura rebelde.'},
+      {img: 'Look7.png', title: 'Elegancia Ejecutiva Contemporánea', meta: 'Prendas: Anta Jacket blazer, Orva Shirt, Itta Pant denim', desc: 'Redefine el estilo business casual con tonos neutros y cortes ajustados profesionales.'},
+      {img: 'Look8.png', title: 'Minimalismo Elegante en Tonos Tierra', meta: 'Prendas: Florida Trench, Anna Cardigan, Itta Pant denim', desc: 'Destaca por su fluidez y sofisticación cromática en tonos camel y texturas naturales.'},
+      {img: 'Look9.png', title: 'Sofisticación Urbana en Texturas', meta: 'Prendas: Vinaja Jacket, Dina Sweater, Carwilly Jeans', desc: 'Une la estructura de la chaqueta verde bosque con la suavidad del punto gris claro.'},
+      {img: 'Look10.png', title: 'Confort Atemporal en Relieve', meta: 'Prendas: Vinaja Jacket, Dina Sweater knit, Carwilly Jeans', desc: 'Prioriza la riqueza de los materiales con azul marino estructurado y punto trenzado.'}
+    ];
+
+    let index = 0;
+    const imgEl = document.getElementById('lookImage');
+    const titleEl = document.getElementById('lookTitle');
+    const descEl = document.getElementById('lookDesc');
+    const metaEl = document.getElementById('lookMeta');
+    const dotsContainer = document.getElementById('dots');
+
+    looks.forEach((_, i) => {
+      const d = document.createElement('div');
+      d.className = 'dot' + (i === 0 ? ' active' : '');
+      d.addEventListener('click', () => goTo(i));
+      dotsContainer.appendChild(d);
+    });
+
+    const dots = [...dotsContainer.children];
+
+    function updateUI(){
+      const look = looks[index];
+      imgEl.style.opacity = 0;
+      setTimeout(()=>{
+        imgEl.src = look.img;
+        titleEl.textContent = look.title;
+        descEl.textContent = look.desc;
+        metaEl.textContent = look.meta;
+        imgEl.style.opacity = 1;
+      },200);
+      dots.forEach((d,i)=> d.classList.toggle('active', i===index));
+    }
+
+    function goTo(i){
+      if(i<0) i = looks.length - 1;
+      if(i>=looks.length) i = 0;
+      index=i; 
+      updateUI();
+    }
+
+    document.getElementById('prevBtn').onclick = () => goTo(index-1);
+    document.getElementById('nextBtn').onclick = () => goTo(index+1);
+
+    updateUI();
+  </script>
+
+</body>
+</html>

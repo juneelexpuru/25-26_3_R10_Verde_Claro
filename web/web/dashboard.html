@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Lookiero - Dashboard Interactivo</title>
+  <link rel="stylesheet" href="style.css" />
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+<script src="https://d3js.org/d3.v7.min.js"></script>
+
+<style>
+:root {
+  --brand-hover: #d88a6d;
+  --brand-primary: #f3a486;
+  --bg-color: #f1e4db;
+  --text-dark: #333;
+}
+
+body { margin: 0; font-family: sans-serif; background: var(--bg-color); color: var(--text-dark); }
+
+.header {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 1rem 2rem; background: #fff; border-bottom: 1px solid rgba(0,0,0,0.1);
+  border-radius: 12px; margin: 1rem; position: relative;
+}
+
+.header-logo img { height: 70px; width: auto; }
+.header-title { font-size: 2rem; font-weight: 700; position:absolute; left:50%; transform:translateX(-50%); }
+
+.nav-tabs { display: flex; gap: 1.5rem; }
+.nav-tabs a {
+  text-decoration: none; color: #000; font-weight: 700; padding: .6rem 1rem;
+  background: var(--brand-primary); border-radius: 8px; transition: 0.3s;
+}
+.nav-tabs a:hover { background: var(--brand-hover); color: #fff; }
+
+.info-box {
+  background: white; margin: 1rem; padding: 1.5rem; border-radius: 12px;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+}
+
+.dashboard-title { text-align: center; font-size: 1.6rem; font-weight: 700; margin-bottom: 1rem; }
+.metrics-container { display: flex; justify-content: space-around; text-align: center; margin-bottom: 1rem; }
+.metric-card p { font-size: 2rem; font-weight: 800; margin: 5px 0; color: var(--brand-hover); }
+
+.chart-pair-block { display: flex; justify-content: center; flex-wrap: wrap; gap: 30px; }
+.chart-item h3 { font-size: 1.1rem; margin-bottom: 1rem; }
+
+.tooltip-pie {
+  position: absolute; background: rgba(255,255,255,0.95); border: 1px solid #ccc;
+  padding: 8px; pointer-events: none; opacity: 0; font-size: 12px;
+  border-radius: 4px; box-shadow: 0 2px 8px rgba(0,0,0,0.15); z-index: 2000;
+}
+
+.nav-arrow {
+  position: fixed; bottom: 30px; padding: 15px 20px; font-size: 1.5rem;
+  border-radius: 50%; border: none; background: var(--brand-primary);
+  cursor: pointer; z-index: 100; transition: 0.3s;
+}
+.nav-arrow:hover { background: var(--brand-hover); transform: scale(1.1); color: #fff; }
+.arrow-right { right: 30px; }
+.arrow-left { left: 30px; }
+
+#page-looks { display: none; }
+rect, path { transition: opacity 0.2s; cursor: pointer; }
+</style>
+</head>
+
+<body>
+
+<header class="header">
+  <div class="header-left">
+    <div class="header-logo"><a href="info.html"><img src="lookiero_logo.jpg" alt="Logo"></a></div>
+  </div>
+  <div class="header-title">Lookiero Admin</div>
+  <nav class="nav-tabs">
+    <a href="index.html"><i class="fas fa-home"></i> Inicio</a>
+    <a href="dashboard.html" style="background: var(--brand-hover); color:#fff;"><i class="fas fa-chart-bar"></i> Dashboard</a>
+    <a href="looks.html"><i class="fas fa-shirt"></i> Looks</a>
+    <a href="modelo.html"><i class="fas fa-brain"></i> Modelo</a>
+  </nav>
+</header>
+
+<div id="page-web">
+  <div class="info-box">
+    <div class="dashboard-title">Análisis de Flujo Web</div>
+    <div class="metrics-container">
+      <div class="metric-card"><h3>Total Eventos</h3><p id="total-events">–</p></div>
+      <div class="metric-card"><h3>Usuarios Únicos</h3><p id="unique-users">–</p></div>
+    </div>
+  </div>
+
+  <div class="info-box">
+    <div class="chart-pair-block">
+      <div class="chart-item"><h3>Eventos por Sección</h3><div id="viz_container"></div></div>
+      <div class="chart-item"><h3>Evolución Temporal</h3><div id="events_time"></div></div>
+    </div>
+  </div>
+
+  <div class="info-box">
+    <div class="chart-pair-block">
+      <div class="chart-item"><h3>Actividad por Día</h3><div id="users_section"></div></div>
+    </div>
+  </div>
+  <button class="nav-arrow arrow-right" onclick="goToLooks()"><i class="fas fa-arrow-right"></i></button>
+</div>
+
+<div id="page-looks">
+  <div class="info-box">
+    <div class="chart-pair-block">
+      <div class="chart-item"><h3>Distribución de Categorías</h3><div id="AreaPie"></div></div>
+      <div class="chart-item"><h3>Matriz Estilo vs Categoría</h3><div id="ColorMatrix"></div></div>
+    </div>
+  </div>
+  <div class="info-box">
+    <div class="chart-pair-block">
+      <div class="chart-item"><h3>Prendas por Estilo</h3><div id="StyleBars"></div></div>
+      <div class="chart-item"><h3>Nivel de Atrevimiento</h3><div id="AdventurousBars"></div></div>
+    </div>
+  </div>
+  <button class="nav-arrow arrow-left" onclick="goToWeb()"><i class="fas fa-arrow-left"></i></button>
+</div>
+
+<script>
+const csvUrl = "https://raw.githubusercontent.com/juneelexpuru/25-26_3_R10_Verde_Claro/main/page_views_2.csv";
+const looksUrl = "https://raw.githubusercontent.com/juneelexpuru/25-26_3_R10_Verde_Claro/main/df_grafo.csv";
+
+const tooltip = d3.select("body").append("div").attr("class", "tooltip-pie");
+
+function renderWeb() {
+  d3.dsv(";", csvUrl).then(data => {
+    document.getElementById("total-events").innerText = data.length;
+    document.getElementById("unique-users").innerText = new Set(data.map(d => d.user_id)).size;
+
+    // 1. Eventos por sección
+    const grouped = d3.rollup(data, v => v.length, d => d.section);
+    const chartData = Array.from(grouped, ([k,v]) => ({k,v}));
+    const svg = d3.select("#viz_container").append("svg").attr("width", 450).attr("height", 350);
+    const x = d3.scaleBand().domain(chartData.map(d => d.k)).range([60,420]).padding(0.3);
+    const y = d3.scaleLinear().domain([0, d3.max(chartData,d=>d.v)]).range([300,40]);
+
+    svg.append("g").attr("transform","translate(0,300)").call(d3.axisBottom(x)).selectAll("text").attr("transform","rotate(-30)").style("text-anchor","end");
+    svg.append("g").attr("transform","translate(60,0)").call(d3.axisLeft(y));
+
+    svg.selectAll("rect").data(chartData).enter().append("rect")
+      .attr("x", d => x(d.k)).attr("y", d => y(d.v)).attr("width", x.bandwidth()).attr("height", d => 300 - y(d.v))
+      .attr("fill", "#f3a486").attr("rx", 6)
+      .on("mouseover", (e, d) => {
+        d3.select(e.currentTarget).attr("fill", "#d88a6d");
+        tooltip.style("opacity", 1).html(`<strong>${d.k}</strong><br>Eventos: ${d.v}`).style("left", (e.pageX+10)+"px").style("top", (e.pageY-20)+"px");
+      })
+      .on("mouseout", (e) => { d3.select(e.currentTarget).attr("fill", "#f3a486"); tooltip.style("opacity", 0); });
+
+    // 2. Evolución temporal
+    const parseDate = d3.timeParse("%Y-%m-%d");
+    data.forEach(d => d.date = parseDate(d.event_date_));
+    const timeData = Array.from(d3.rollup(data, v => v.length, d => d3.timeDay(d.date)), ([date,count]) => ({date,count})).sort((a,b) => a.date - b.date);
+    const svgTime = d3.select("#events_time").append("svg").attr("width",450).attr("height",350);
+    const xt = d3.scaleTime().domain(d3.extent(timeData,d=>d.date)).range([0,350]);
+    const yt = d3.scaleLinear().domain([0,d3.max(timeData,d=>d.count)]).range([250,0]);
+    const gTime = svgTime.append("g").attr("transform","translate(60,40)");
+    
+    gTime.append("g").attr("transform","translate(0,250)").call(d3.axisBottom(xt)).selectAll("text").attr("transform","rotate(-45)").style("text-anchor","end");
+    gTime.append("g").call(d3.axisLeft(yt));
+    gTime.append("path").datum(timeData).attr("fill","none").attr("stroke","#d88a6d").attr("stroke-width",3).attr("d", d3.line().x(d=>xt(d.date)).y(d=>yt(d.count)));
+    
+    gTime.selectAll("circle").data(timeData).enter().append("circle")
+      .attr("cx", d => xt(d.date)).attr("cy", d => yt(d.count)).attr("r", 4).attr("fill", "#333")
+      .on("mouseover", (e, d) => { tooltip.style("opacity", 1).html(`Fecha: ${d3.timeFormat("%d/%m")(d.date)}<br>Eventos: ${d.count}`).style("left", (e.pageX+10)+"px").style("top", (e.pageY-20)+"px"); })
+      .on("mouseout", () => tooltip.style("opacity", 0));
+
+    // 3. Días de la semana
+    const dayNames = {"Monday":"Lunes","Tuesday":"Martes","Wednesday":"Miércoles","Thursday":"Jueves","Friday":"Viernes","Saturday":"Sábado","Sunday":"Domingo"};
+    const order = ["Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday"];
+    const dailyData = Array.from(d3.rollup(data, v => v.length, d => d3.timeFormat("%A")(d.date)), ([day,count]) => ({day,count})).sort((a,b) => order.indexOf(a.day) - order.indexOf(b.day));
+    const svgUsers = d3.select("#users_section").append("svg").attr("width",500).attr("height",350);
+    const xu = d3.scaleBand().domain(dailyData.map(d => dayNames[d.day])).range([60,440]).padding(0.3);
+    const yu = d3.scaleLinear().domain([0,d3.max(dailyData,d=>d.count)]).range([300,40]);
+
+    svgUsers.append("g").attr("transform","translate(0,300)").call(d3.axisBottom(xu));
+    svgUsers.append("g").attr("transform","translate(60,0)").call(d3.axisLeft(yu));
+
+    svgUsers.selectAll("rect").data(dailyData).enter().append("rect")
+      .attr("x", d => xu(dayNames[d.day])).attr("y", d => yu(d.count)).attr("width", xu.bandwidth()).attr("height", d => 300 - yu(d.count))
+      .attr("fill", "#333").attr("rx", 6)
+      .on("mouseover", (e, d) => { 
+        d3.select(e.currentTarget).attr("fill", "#d88a6d");
+        tooltip.style("opacity", 1).html(`<strong>${dayNames[d.day]}</strong><br>Total: ${d.count}`).style("left", (e.pageX+10)+"px").style("top", (e.pageY-20)+"px"); 
+      })
+      .on("mouseout", (e) => { d3.select(e.currentTarget).attr("fill", "#333"); tooltip.style("opacity", 0); });
+  });
+}
+
+function renderLooks() {
+  d3.csv(looksUrl).then(data => {
+    // Pie Chart con efecto pop-out
+    const widthPie = 400, heightPie = 350, radius = 120;
+    const svg_pie = d3.select("#AreaPie").append("svg").attr("width", widthPie).attr("height", heightPie).append("g").attr("transform", `translate(${widthPie/2},${heightPie/2})`);
+    const counts = d3.rollups(data, v => v.length, d => d.categoria_prenda).map(([key, value]) => ({categoria: key, cantidad: value}));
+    const colorPie = d3.scaleOrdinal().range(['#b35e5e','#bc7373','#c58888','#ce9d9d','#f3a486','#da9d54']);
+    const pie = d3.pie().value(d => d.cantidad);
+    const arc = d3.arc().innerRadius(radius*0.4).outerRadius(radius);
+    const arcOver = d3.arc().innerRadius(radius*0.4).outerRadius(radius + 10);
+    
+    svg_pie.selectAll("path").data(pie(counts)).enter().append("path").attr("d", arc).attr("fill", d => colorPie(d.data.categoria)).attr("stroke", "white")
+      .on("mouseover", (e, d) => {
+        d3.select(e.currentTarget).transition().duration(200).attr("d", arcOver);
+        tooltip.style("opacity", 1).html(`<strong>${d.data.categoria}</strong><br>${d.data.cantidad} prendas`).style("left", (e.pageX+10)+"px").style("top", (e.pageY-20)+"px");
+      })
+      .on("mouseout", (e) => { d3.select(e.currentTarget).transition().duration(200).attr("d", arc); tooltip.style("opacity", 0); });
+
+    // Matrix con escala de color dinámica y labels
+    const categories = Array.from(new Set(data.map(d=>d.categoria_prenda)));
+    const styles = Array.from(new Set(data.map(d=>d.style)));
+    const matrixData=[];
+    categories.forEach(cat=>styles.forEach(st=>{
+      const filtered = data.filter(d=>d.categoria_prenda===cat && d.style===st);
+      if(filtered.length>0) matrixData.push({cat,st,count:filtered.length});
+    }));
+    const intensity = d3.scaleLinear().domain([0, d3.max(matrixData, d => d.count)]).range(["#fff5f2", "#f3a486"]);
+    const svgMat = d3.select("#ColorMatrix").append("svg").attr("width", 450).attr("height", 350).append("g").attr("transform", "translate(90,20)");
+    const xMat = d3.scaleBand().range([0, 340]).domain(styles).padding(0.05);
+    const yMat = d3.scaleBand().range([270, 0]).domain(categories).padding(0.05);
+
+    svgMat.append("g").attr("transform", "translate(0,270)").call(d3.axisBottom(xMat)).selectAll("text").attr("transform", "rotate(-30)").style("text-anchor", "end");
+    svgMat.append("g").call(d3.axisLeft(yMat));
+
+    svgMat.selectAll("rect").data(matrixData).enter().append("rect")
+      .attr("x", d => xMat(d.st)).attr("y", d => yMat(d.cat)).attr("width", xMat.bandwidth()).attr("height", yMat.bandwidth())
+      .style("fill", d => intensity(d.count)).attr("rx", 4)
+      .on("mouseover", (e, d) => {
+        tooltip.style("opacity", 1).html(`Estilo: ${d.st}<br>Cat: ${d.cat}<br>Cantidad: ${d.count}`).style("left", (e.pageX+10)+"px").style("top", (e.pageY-20)+"px");
+      })
+      .on("mouseout", () => tooltip.style("opacity", 0));
+
+    svgMat.selectAll("text.label").data(matrixData).enter().append("text")
+      .attr("x", d => xMat(d.st) + xMat.bandwidth()/2).attr("y", d => yMat(d.cat) + yMat.bandwidth()/2)
+      .attr("dy", ".35em").attr("text-anchor", "middle").style("font-size", "10px").style("pointer-events","none").text(d => d.count);
+
+    // Barras de Estilo
+    const styleCounts = Array.from(d3.rollup(data, v => v.length, d => d.style), ([k,v]) => ({k,v})).sort((a,b) => b.v - a.v);
+    const svgStyle = d3.select("#StyleBars").append("svg").attr("width", 400).attr("height", 350);
+    const xS = d3.scaleBand().domain(styleCounts.map(d => d.k)).range([60,360]).padding(0.3);
+    const yS = d3.scaleLinear().domain([0, d3.max(styleCounts, d => d.v)]).range([300, 40]);
+    
+    svgStyle.append("g").attr("transform","translate(0,300)").call(d3.axisBottom(xS)).selectAll("text").attr("transform","rotate(-30)").style("text-anchor","end");
+    svgStyle.append("g").attr("transform","translate(60,0)").call(d3.axisLeft(yS));
+    
+    svgStyle.selectAll("rect").data(styleCounts).enter().append("rect")
+      .attr("x", d => xS(d.k)).attr("y", d => yS(d.v)).attr("width", xS.bandwidth()).attr("height", d => 300 - yS(d.v))
+      .attr("fill", "#f3a486").attr("rx", 6)
+      .on("mouseover", (e, d) => { 
+        d3.select(e.currentTarget).attr("fill", "#d88a6d");
+        tooltip.style("opacity", 1).html(`Estilo: ${d.k}<br>Prendas: ${d.v}`).style("left", (e.pageX+10)+"px").style("top", (e.pageY-20)+"px"); 
+      })
+      .on("mouseout", (e) => { d3.select(e.currentTarget).attr("fill", "#f3a486"); tooltip.style("opacity", 0); });
+
+    // Barras de Atrevimiento
+    const advCounts = Array.from(d3.rollup(data, v => v.length, d => d.adventurous), ([k,v]) => ({k,v})).sort((a,b) => a.k - b.k);
+    const svgA = d3.select("#AdventurousBars").append("svg").attr("width", 400).attr("height", 350);
+    const xA = d3.scaleBand().domain(advCounts.map(d => d.k)).range([60,360]).padding(0.3);
+    const yA = d3.scaleLinear().domain([0, d3.max(advCounts, d => d.v)]).range([300, 40]);
+    
+    svgA.append("g").attr("transform","translate(0,300)").call(d3.axisBottom(xA));
+    svgA.append("g").attr("transform","translate(60,0)").call(d3.axisLeft(yA));
+    
+    svgA.selectAll("rect").data(advCounts).enter().append("rect")
+      .attr("x", d => xA(d.k)).attr("y", d => yA(d.v)).attr("width", xA.bandwidth()).attr("height", d => 300 - yA(d.v))
+      .attr("fill", "#333").attr("rx", 6)
+      .on("mouseover", (e, d) => { 
+        d3.select(e.currentTarget).attr("fill", "#d88a6d");
+        tooltip.style("opacity", 1).html(`Nivel: ${d.k}<br>Frecuencia: ${d.v}`).style("left", (e.pageX+10)+"px").style("top", (e.pageY-20)+"px"); 
+      })
+      .on("mouseout", (e) => { d3.select(e.currentTarget).attr("fill", "#333"); tooltip.style("opacity", 0); });
+  });
+}
+
+renderWeb();
+
+function goToLooks() {
+  document.getElementById("page-web").style.display = "none";
+  document.getElementById("page-looks").style.display = "block";
+  d3.selectAll("#page-looks svg").remove();
+  renderLooks();
+}
+
+function goToWeb() {
+  document.getElementById("page-looks").style.display = "none";
+  document.getElementById("page-web").style.display = "block";
+  d3.selectAll("#page-web svg").remove();
+  renderWeb();
+}
+</script>
+
+</body>
+</html>
