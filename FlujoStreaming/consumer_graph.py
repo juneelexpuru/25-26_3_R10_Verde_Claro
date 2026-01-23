@@ -1,5 +1,6 @@
-import json
 import os
+os.environ["KMP_DUPLICATE_LIB_OK"]="True"
+import json
 import pandas as pd
 import numpy as np
 import networkx as nx
