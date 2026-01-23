@@ -1,15 +1,34 @@
-RETO-10-LOOKIERO/
+# 25-26_3_R10_Verde_Claro
+
+# Reto 10: Lookiero
+
+Este repositorio contiene el desarrollo del **Reto 10**, centrado en la optimización del User Experience (UX) y la implementación de un sistema inteligente de generación de looks utilizando Teoría de Grafos, Machine Learning y Streaming.
+
+## 👥 Equipo Verde Claro:
+* **Libe Arana Carrascal**
+* **Jon Ayala Lecea**
+* **June Elexpuru Domínguez**
+* **Markel Jorge Gomez**
+* **Vega Lopez De Lapuente**
+* **Martin Martinez Orive**
+
+---
+
+## 📂 Estructura del Proyecto
+## 📂 Estructura del Proyecto
+
+```text
+RETO10_entrega/
 │
 ├── datos/                  
 │   ├── Originales/         
 │   │   ├── Datos_look&like/
 │   │   │   ├── customers_data_2.csv
 │   │   │   ├── items_data.csv
-│   │   │   └── look_and_like_data_2.csv
+│   │   │   └── look_and_like_data_2.csv [cite: 13]
 │   │   ├── Datos_looks/
 │   │   │   ├── brand.csv
 │   │   │   ├── color.csv
-│   │   │   ├── desktop.ini
 │   │   │   ├── feature.csv
 │   │   │   ├── feature_value.csv
 │   │   │   ├── feature_value_family.csv
@@ -18,9 +37,9 @@ RETO-10-LOOKIERO/
 │   │   │   ├── product_feature_value_qualifier.csv
 │   │   │   ├── product_variant.csv
 │   │   │   ├── season.csv
-│   │   │   └── size.csv
+│   │   │   └── size.csv [cite: 13]
 │   │   └── Datos_UX/
-│   │       └── page_views_2.csv
+│   │       └── page_views_2.csv [cite: 13]
 │   │
 │   └── Transformados/        # Datos procesados listos para el modelo
 │       ├── combinaciones_final.csv
@@ -28,28 +47,27 @@ RETO-10-LOOKIERO/
 │       ├── df_expandido.csv
 │       ├── df_grafo_final.csv
 │       ├── df_resultado.csv
-│       └── resultados_looks_optimizado.csv 
+│       └── resultados_looks_optimizado.csv [cite: 13]
 │
 ├── Modelos/
 │   ├── grap.gml         
-│   └── Modelo_GAT.pth           
+│   └── Modelo_GAT.pth [cite: 13]          
 │
-├── Scripts/                   # orden de ejecución
+├── Scripts/                   # Orden de ejecución
 │   ├── Preprocesamiento.ipynb # 1        
-│   └── Creacion_Grafo.ipynb   # 2
-│   └── Analisis_Grafo.ipynb   # 3
-│   └── Modelo.ipynb           # 4 
-│   └── funciones.py
-│   │
-│   ├── Graficos/            
-│   │
+│   ├── Creacion_Grafo.ipynb   # 2
+│   ├── Analisis_Grafo.ipynb   # 3
+│   ├── Modelo.ipynb           # 4 
+│   ├── funciones.py
+│   └── Graficos/ [cite: 13]           
+│
 ├── FlujoStreaming/
 │   ├── templates/
-│   │     │ index.html
-│   consumer_graph.py
-│   funciones.py
-│   producer_app.py
-│   │
+│   │   └── index.html
+│   ├── consumer_graph.py
+│   ├── funciones.py
+│   └── producer_app.py [cite: 13]
+│
 ├── web/             
 │   ├── dashboard.html
 │   ├── index.html
@@ -67,7 +85,7 @@ RETO-10-LOOKIERO/
 │   ├── Look9.png
 │   ├── Look10.png
 │   ├── lookiero_logo.jpg
-│   └── style.css      
+│   └── style.css [cite: 13]     
 │
 ├── environmentR10VerdeClaro.txt        
-└── README.md
+└── README.md [cite: 13]
