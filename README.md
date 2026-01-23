@@ -1,60 +1,73 @@
-# 25-26_3_R10_Verde_Claro
-
-# Reto 10: Lookiero
-
-Este repositorio contiene el desarrollo del **Reto 10**, centrado en la optimización del User Experience (UX) y la implementación de un sistema inteligente de generación de looks utilizando Teoría de Grafos, Machine Learning y Streaming.
-
-## 👥 Equipo Verde Claro:
-* **Libe Arana Carrascal**
-* **Jon Ayala Lecea**
-* **June Elexpuru Domínguez**
-* **Markel Jorge Gomez**
-* **Vega Lopez De Lapuente**
-* **Martin Martinez Orive**
-
----
-
-## 📂 Estructura del Proyecto
-
-El código se ha organizado de forma modular. **Nota Importante:** Los datasets y modelos entrenados no se incluyen en el repositorio por política de privacidad y tamaño, pero deben ubicarse en la carpeta local `/data` para la ejecución de los scripts.
-
-```text
 RETO-10-LOOKIERO/
 │
-├── datos/                   # CARPETA IGNORADA POR GIT (Colocar aquí los CSVs)
-│   ├── originales/          # Datos originales (ej. productos.csv)
-│   └── transformados/       # Datos limpios generados
-│
-├── modelos/                 # CARPETA IGNORADA POR GIT (Guardar aquí .pth / .pkl)
-│
-├── docs/                   # Documentación y entregables no-código
-│   ├── ux_benchmarking/    # Informes de Benchmarking y Wireframes
-│   └── images/             # Imágenes para el README o la Wiki
-│
-├── src/                    # Código Fuente Modular
-│   ├── preprocessing/      # Scripts de limpieza y preparación
-│   │   └── data_cleaner.py
+├── datos/                  
+│   ├── Originales/         
+│   │   ├── Datos_look&like/
+│   │   │   ├── customers_data_2.csv
+│   │   │   ├── items_data.csv
+│   │   │   └── look_and_like_data_2.csv
+│   │   ├── Datos_looks/
+│   │   │   ├── brand.csv
+│   │   │   ├── color.csv
+│   │   │   ├── desktop.ini
+│   │   │   ├── feature.csv
+│   │   │   ├── feature_value.csv
+│   │   │   ├── feature_value_family.csv
+│   │   │   ├── product_2.csv
+│   │   │   ├── product_feature_value.csv
+│   │   │   ├── product_feature_value_qualifier.csv
+│   │   │   ├── product_variant.csv
+│   │   │   ├── season.csv
+│   │   │   └── size.csv
+│   │   └── Datos_UX/
+│   │       └── page_views_2.csv
 │   │
-│   ├── graphs/             # Lógica de Grafos y Generación de Looks
-│   │   ├── graph_builder.py      # Construcción del grafo y cálculo de centralidad
-│   │   └── look_generator.py     # Algoritmo de generación de outfits (reglas)
-│   │
-│   ├── mining/             # Machine Learning y Embeddings
-│   │   ├── eda_look_like.py      # Análisis exploratorio Look&Like
-│   │   └── node2vec_embed.py     # Generación de Graph Embeddings
-│   │
-│   ├── streaming/          # Arquitectura Big Data (Simulación)
-│   │   ├── kafka_producer.py     # Simulación de entrada de nuevas prendas
-│   │   └── kafka_consumer.py     # Ingesta y procesamiento en tiempo real
-│   │
-│   └── web/              
-│       ├── index.html
-│       ├── looks.html
-│       ├── dashboard.html
-│       ├── info.html
-│       ├── look.jpg
-│       ├── lookiero_logo.jpg
-│       └── style.css        
+│   └── Transformados/        # Datos procesados listos para el modelo
+│       ├── combinaciones_final.csv
+│       ├── completo_combinaciones_colores.csv
+│       ├── df_expandido.csv
+│       ├── df_grafo_final.csv
+│       ├── df_resultado.csv
+│       └── resultados_looks_optimizado.csv 
 │
-├── requirements.txt        # Librerías necesarias (NetworkX, PyTorch, Kafka, etc.)
-└── README.md               # Documentación del proyecto
+├── Modelos/
+│   ├── grap.gml         
+│   └── Modelo_GAT.pth           
+│
+├── Scripts/                   # orden de ejecución
+│   ├── Preprocesamiento.ipynb # 1        
+│   └── Creacion_Grafo.ipynb   # 2
+│   └── Analisis_Grafo.ipynb   # 3
+│   └── Modelo.ipynb           # 4 
+│   └── funciones.py
+│   │
+│   ├── Graficos/            
+│   │
+├── FlujoStreaming/
+│   ├── templates/
+│   │     │ index.html
+│   consumer_graph.py
+│   funciones.py
+│   producer_app.py
+│   │
+├── web/             
+│   ├── dashboard.html
+│   ├── index.html
+│   ├── info.html
+│   ├── looks.html
+│   ├── look.png
+│   ├── Look1.png
+│   ├── Look2.png
+│   ├── Look3.png
+│   ├── Look4.png
+│   ├── Look5.png
+│   ├── Look6.png
+│   ├── Look7.png
+│   ├── Look8.png
+│   ├── Look9.png
+│   ├── Look10.png
+│   ├── lookiero_logo.jpg
+│   └── style.css      
+│
+├── environmentR10VerdeClaro.txt        
+└── README.md
